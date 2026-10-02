@@ -171,8 +171,12 @@ export default async function BirthdaySharePage({
   return (
     <>
       <GuestHeader />
-      <main id="main" className="bs-shell flex-1 py-8 sm:py-12">
-        <div className="mx-auto w-full max-w-2xl">
+      <main
+        id="main"
+        className="bs-shell relative flex-1 overflow-hidden py-8 sm:py-14"
+      >
+        <div aria-hidden="true" className="bs-guest-backdrop" />
+        <div className="relative mx-auto w-full max-w-4xl">
           <BirthdayPage draft={birthday.draft} />
         </div>
       </main>

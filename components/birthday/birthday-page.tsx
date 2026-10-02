@@ -21,19 +21,33 @@ export default function BirthdayPage({ draft }: { draft: BirthdayDraft }) {
       aria-label={`${theme.name} birthday preview for ${name}`}
     >
       <BirthdayDecorations kind={theme.decorations} />
-      <BirthdayScene
-        key={theme.scene.kind}
-        scene={theme.scene}
-      />
+
+      {/*
+        The hero artwork. The live 3D scene is the artwork panel itself, not a
+        backdrop behind the card: it fills this region, the shade and divider
+        are composited over it, and the birthday typography sits into the bottom
+        of the same panel the way a poster title sits over its art. Nothing
+        kinetic ever covers text — the scene is fixed behind the shade, and the
+        shade sits behind the type.
+      */}
+      <section className="bp-hero-art">
+        <BirthdayScene
+          key={theme.scene.kind}
+          scene={theme.scene}
+        />
+        <span className="bp-hero-shade" aria-hidden="true" />
+        <span className="bp-hero-divider" aria-hidden="true" />
+        <div className="bp-hero-type">
+          <BirthdayHero
+            name={name}
+            relationshipLine={relationshipPhrase(draft.relationship)}
+            emoji={theme.emoji}
+          />
+        </div>
+      </section>
 
       <div className="bp-inner">
-        <BirthdayHero
-          name={name}
-          relationshipLine={relationshipPhrase(draft.relationship)}
-          emoji={theme.emoji}
-        />
-
-        <div className="mt-8 space-y-6 sm:mt-10 sm:space-y-8">
+        <div className="mt-6 space-y-6 sm:mt-8 sm:space-y-8">
           <BirthdayMessage message={message} />
           <BirthdayGallery photos={draft.photos} emoji={theme.emoji} />
         </div>

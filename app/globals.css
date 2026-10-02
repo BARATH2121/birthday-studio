@@ -458,7 +458,7 @@
   .bp-inner {
     position: relative;
     z-index: 1;
-    padding: 2.5rem 1.25rem 2.75rem;
+    padding: 2rem 1.25rem 2.75rem;
   }
 
   .bp-frame {
@@ -467,7 +467,86 @@
 
   @media (min-width: 40rem) {
     .bp-inner {
-      padding: 3.5rem 2.5rem 4rem;
+      padding: 2.75rem 2.5rem 4rem;
+    }
+  }
+
+  /* ---------- Cinematic hero artwork: the 3D scene is the poster art ---------- */
+
+  .bp-hero-art {
+    --b-hero-aura: rgb(147 180 255 / 0.16);
+
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    min-height: min(54vh, 26rem);
+    overflow: hidden;
+    border-bottom: 1px solid var(--b-card-border);
+    border-radius: var(--b-radius) var(--b-radius) 0 0;
+    background-image:
+      radial-gradient(130% 110% at 50% -18%, var(--b-glow) 0%, transparent 55%),
+      radial-gradient(74% 62% at 82% 16%, var(--b-hero-aura) 0%, transparent 58%),
+      linear-gradient(175deg, var(--b-bg-a) 0%, var(--b-bg-b) 100%);
+    box-shadow: 0 34px 70px -42px var(--b-glow);
+  }
+
+  .bp[data-bstyle="romantic"] { --b-hero-aura: rgb(255 56 108 / 0.24); }
+  .bp[data-bstyle="cute-colorful"] { --b-hero-aura: rgb(74 222 234 / 0.22); }
+  .bp[data-bstyle="elegant"] { --b-hero-aura: rgb(232 207 154 / 0.18); }
+  .bp[data-bstyle="fun-crazy"] { --b-hero-aura: rgb(168 85 247 / 0.24); }
+  .bp[data-bstyle="cinematic"] { --b-hero-aura: rgb(67 126 255 / 0.24); }
+
+  .bp-hero-shade {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: linear-gradient(
+      180deg,
+      rgb(4 5 13 / 0) 34%,
+      rgb(4 5 13 / 0.18) 58%,
+      rgb(4 5 13 / 0.62) 84%,
+      var(--b-bg-b) 100%
+    );
+  }
+
+  .bp-hero-divider {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    z-index: 0;
+    height: 2px;
+    pointer-events: none;
+    background-image: linear-gradient(
+      90deg,
+      transparent 4%,
+      var(--b-accent) 50%,
+      transparent 96%
+    );
+    opacity: 0.5;
+  }
+
+  .bp-hero-type {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 1.5rem 1.75rem;
+    text-align: center;
+    pointer-events: none;
+  }
+
+  .bp-hero-type .bp-name,
+  .bp-hero-type .bp-rel {
+    text-shadow: 0 2px 22px rgb(4 5 13 / 0.6);
+  }
+
+  @media (min-width: 40rem) {
+    .bp-hero-art {
+      min-height: clamp(21rem, 46vh, 30rem);
+    }
+
+    .bp-hero-type {
+      padding: 3.5rem 2.5rem 2.25rem;
     }
   }
 
@@ -515,6 +594,11 @@
     border: 1px solid var(--b-card-border);
     background-color: var(--b-card);
     padding: 1.5rem;
+    backdrop-filter: blur(16px) saturate(1.15);
+    -webkit-backdrop-filter: blur(16px) saturate(1.15);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.08),
+      0 24px 48px -28px rgb(0 0 0 / 0.75);
   }
 
   .bp-message {
@@ -552,6 +636,17 @@
     border: 1px solid var(--b-photo-frame);
     background-color: rgb(0 0 0 / 0.25);
     box-shadow: var(--b-photo-shadow);
+  }
+
+  .bp-photo::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    border: 1px solid var(--b-photo-frame);
+    opacity: 0.65;
   }
 
   /* Photos render at their original aspect ratio. No fixed box on the frame and
@@ -1055,6 +1150,20 @@
   .bp-generate {
     margin-top: 2.25rem;
   }
+}
+
+/* Cinematic page backdrop for the public birthday poster. Fills the dark page
+   around the card with a faint themed glow so the poster reads as art staged
+   on a screen rather than a card on a flat background. Decorative only; it
+   never intercepts pointer events. */
+.bs-guest-backdrop {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    radial-gradient(56rem 32rem at 50% -10%, rgb(147 180 255 / 0.08), transparent 62%),
+    radial-gradient(34rem 24rem at 10% 112%, rgb(255 77 151 / 0.06), transparent 60%),
+    radial-gradient(34rem 24rem at 90% 112%, rgb(168 85 247 / 0.06), transparent 60%);
 }
 
 /* Slightly taller than a nav button, and full-bleed on mobile so the primary
