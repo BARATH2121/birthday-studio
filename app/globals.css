@@ -1,26 +1,1057 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  /* Deep night surfaces */
+  --color-night-950: #04050d;
+  --color-night-900: #080a19;
+  --color-night-850: #0b0e21;
+  --color-night-800: #10142c;
+  --color-night-700: #191e40;
+  --color-night-600: #272d5c;
+
+  /* Accent ramp: blush -> grape -> azure */
+  --color-blush-300: #ffa3c9;
+  --color-blush-400: #ff7ab0;
+  --color-blush-500: #ff4d97;
+
+  --color-grape-300: #d8b4fe;
+  --color-grape-400: #c084fc;
+  --color-grape-500: #a855f7;
+
+  --color-azure-300: #93b4ff;
+  --color-azure-400: #6ba3ff;
+  --color-azure-500: #3b7bff;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
+@layer base {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    color-scheme: dark;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 6rem;
+  }
+
+  body {
+    background-color: var(--color-night-950);
+    color: #f4f3fb;
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  }
+
+  ::selection {
+    background-color: rgb(255 77 151 / 0.32);
+    color: #ffffff;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-blush-400);
+    outline-offset: 3px;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  /* ---------- Layout primitives ---------- */
+
+  .bs-shell {
+    margin-inline: auto;
+    width: 100%;
+    max-width: 72rem;
+    padding-inline: 1.25rem;
+  }
+
+  @media (min-width: 40rem) {
+    .bs-shell {
+      padding-inline: 2rem;
+    }
+  }
+
+  .bs-ambient {
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(58rem 38rem at 10% -12%, rgb(255 77 151 / 0.22), transparent 62%),
+      radial-gradient(52rem 36rem at 92% -6%, rgb(168 85 247 / 0.2), transparent 64%),
+      radial-gradient(70rem 44rem at 50% 112%, rgb(59 123 255 / 0.16), transparent 62%);
+  }
+
+  .bs-grain {
+    position: absolute;
+    inset: 0;
+    opacity: 0.14;
+    mix-blend-mode: soft-light;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  /* ---------- Surfaces ---------- */
+
+  .bs-card {
+    border-radius: 1.5rem;
+    border: 1px solid rgb(255 255 255 / 0.08);
+    background-color: rgb(16 20 44 / 0.62);
+    backdrop-filter: blur(18px);
+  }
+
+  .bs-sheen {
+    background-image:
+      radial-gradient(120% 90% at 50% 0%, rgb(255 77 151 / 0.2), transparent 62%),
+      radial-gradient(110% 90% at 88% 100%, rgb(59 123 255 / 0.18), transparent 60%);
+  }
+
+  .bs-hairline-top {
+    position: relative;
+  }
+
+  .bs-hairline-top::before {
+    content: "";
+    position: absolute;
+    inset-inline: 12%;
+    top: 0;
+    height: 1px;
+    background-image: linear-gradient(
+      90deg,
+      transparent,
+      rgb(255 255 255 / 0.28),
+      transparent
+    );
+  }
+
+  /* ---------- Brand + accent treatments ---------- */
+
+  .bs-logo-tile {
+    display: grid;
+    place-items: center;
+    border-radius: 0.875rem;
+    color: #ffffff;
+    background-image: linear-gradient(
+      135deg,
+      var(--color-blush-500) 0%,
+      var(--color-grape-500) 55%,
+      var(--color-azure-500) 100%
+    );
+    box-shadow:
+      0 8px 22px -10px rgb(168 85 247 / 0.9),
+      inset 0 1px 0 rgb(255 255 255 / 0.35);
+  }
+
+  .bs-text-gradient {
+    background-image: linear-gradient(
+      100deg,
+      var(--color-blush-300) 0%,
+      var(--color-grape-400) 46%,
+      var(--color-azure-300) 100%
+    );
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+
+  .bs-eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background-color: rgb(255 255 255 / 0.04);
+    padding: 0.375rem 0.875rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.01em;
+    color: rgb(255 255 255 / 0.78);
+  }
+
+  .bs-step-number {
+    display: inline-grid;
+    place-items: center;
+    min-width: 2.5rem;
+    height: 2.5rem;
+    border-radius: 0.75rem;
+    padding-inline: 0.625rem;
+    font-family: var(--font-geist-mono), ui-monospace, monospace;
+    font-size: 0.8125rem;
+    font-weight: 500;
+    letter-spacing: 0.06em;
+    color: var(--color-blush-300);
+    border: 1px solid rgb(255 77 151 / 0.28);
+    background-color: rgb(255 77 151 / 0.08);
+  }
+
+  .bs-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.375rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background-color: rgb(255 255 255 / 0.04);
+    padding: 0.375rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: rgb(255 255 255 / 0.74);
+  }
+
+  /* ---------- Buttons ---------- */
+
+  .bs-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    border-radius: 9999px;
+    font-weight: 600;
+    white-space: nowrap;
+    transition:
+      transform 200ms ease,
+      filter 200ms ease,
+      background-color 200ms ease,
+      border-color 200ms ease;
+  }
+
+  .bs-btn:hover {
+    transform: translateY(-1px);
+  }
+
+  .bs-btn:active {
+    transform: translateY(0);
+  }
+
+  .bs-btn-primary {
+    color: #ffffff;
+    background-image: linear-gradient(
+      120deg,
+      var(--color-blush-500) 0%,
+      var(--color-grape-500) 52%,
+      var(--color-azure-500) 100%
+    );
+    box-shadow:
+      0 16px 38px -16px rgb(168 85 247 / 0.85),
+      inset 0 1px 0 rgb(255 255 255 / 0.28);
+  }
+
+  .bs-btn-primary:hover {
+    filter: brightness(1.08);
+  }
+
+  .bs-btn-ghost {
+    color: #ffffff;
+    border: 1px solid rgb(255 255 255 / 0.14);
+    background-color: rgb(255 255 255 / 0.04);
+  }
+
+  .bs-btn-ghost:hover {
+    border-color: rgb(255 255 255 / 0.24);
+    background-color: rgb(255 255 255 / 0.08);
+  }
+
+  .bs-btn[disabled] {
+    opacity: 0.45;
+    pointer-events: none;
+  }
+
+  /* ---------- Form controls ---------- */
+
+  .bs-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1.25rem;
+    color: rgb(255 255 255 / 0.84);
+  }
+
+  .bs-control {
+    display: block;
+    width: 100%;
+    border-radius: 0.875rem;
+    border: 1px solid rgb(255 255 255 / 0.1);
+    background-color: rgb(8 10 25 / 0.86);
+    padding: 0.8125rem 1rem;
+    font-family: inherit;
+    font-size: 0.95rem;
+    line-height: 1.5rem;
+    color: #ffffff;
+    transition:
+      border-color 200ms ease,
+      background-color 200ms ease;
+  }
+
+  .bs-control::placeholder {
+    color: rgb(255 255 255 / 0.34);
+  }
+
+  .bs-control:hover {
+    border-color: rgb(255 255 255 / 0.18);
+  }
+
+  .bs-control:focus {
+    border-color: rgb(255 77 151 / 0.6);
+    background-color: rgb(11 14 33 / 0.92);
+  }
+
+  .bs-control[aria-invalid="true"] {
+    border-color: rgb(255 77 151 / 0.65);
+  }
+
+  .bs-hint {
+    font-size: 0.75rem;
+    line-height: 1.15rem;
+    color: rgb(255 255 255 / 0.5);
+  }
+
+  .bs-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.375rem;
+    font-size: 0.75rem;
+    line-height: 1.15rem;
+    color: var(--color-blush-300);
+  }
+}
+
+/* ==========================================================================
+   Phase 4 — Personalized birthday preview (scoped to .bp)
+   Five styles share one structure; only these tokens change per style.
+   ========================================================================== */
+
+@layer components {
+  .bp {
+    --b-bg-a: #120a1f;
+    --b-bg-b: #1c0f2c;
+    --b-glow: rgb(255 77 151 / 0.35);
+    --b-accent: #ff4d97;
+    --b-accent-2: #a855f7;
+    --b-kicker: var(--b-accent);
+    --b-on-accent: #ffffff;
+    --b-ink: #ffffff;
+    --b-ink-soft: rgb(255 255 255 / 0.74);
+    --b-ink-faint: rgb(255 255 255 / 0.56);
+    --b-card: rgb(255 255 255 / 0.06);
+    --b-card-border: rgb(255 255 255 / 0.12);
+    --b-radius: 1.75rem;
+    --b-photo-radius: 1.25rem;
+    --b-photo-shadow: 0 20px 40px -24px rgb(0 0 0 / 0.9);
+    --b-photo-filter: none;
+    --b-photo-frame: rgb(255 255 255 / 0.14);
+    --b-name-weight: 600;
+    --b-name-transform: none;
+    --b-name-tracking: -0.02em;
+    --b-kicker-transform: none;
+    --b-kicker-tracking: 0.02em;
+    --b-name-size: clamp(2.5rem, 11vw, 4.25rem);
+
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    border-radius: var(--b-radius);
+    border: 1px solid var(--b-card-border);
+    background-image:
+      radial-gradient(120% 80% at 50% 0%, var(--b-glow) 0%, transparent 60%),
+      linear-gradient(170deg, var(--b-bg-a) 0%, var(--b-bg-b) 100%);
+    color: var(--b-ink);
+    box-shadow: 0 40px 90px -50px var(--b-glow);
+  }
+
+  /* ---------- Style: Romantic ---------- */
+  .bp[data-bstyle="romantic"] {
+    --b-bg-a: #1b0a1c;
+    --b-bg-b: #2a0f33;
+    --b-glow: rgb(255 77 151 / 0.42);
+    --b-accent: #ff7ab0;
+    --b-accent-2: #c084fc;
+    --b-kicker: #ff9cc4;
+    --b-card: rgb(255 255 255 / 0.07);
+    --b-card-border: rgb(255 163 201 / 0.22);
+    --b-photo-radius: 1.5rem;
+    --b-photo-shadow: 0 24px 46px -26px rgb(255 77 151 / 0.55);
+    --b-photo-frame: rgb(255 163 201 / 0.3);
+    --b-name-weight: 500;
+    --b-name-tracking: 0.01em;
+    --b-kicker-tracking: 0.22em;
+  }
+
+  /* ---------- Style: Cute & Colorful ---------- */
+  .bp[data-bstyle="cute-colorful"] {
+    --b-bg-a: #2b1140;
+    --b-bg-b: #10294d;
+    --b-glow: rgb(107 163 255 / 0.45);
+    --b-accent: #ffb347;
+    --b-accent-2: #6ba3ff;
+    --b-card: rgb(255 255 255 / 0.1);
+    --b-card-border: rgb(255 255 255 / 0.24);
+    --b-radius: 2.25rem;
+    --b-photo-radius: 1.75rem;
+    --b-photo-shadow: 0 22px 44px -22px rgb(107 163 255 / 0.6);
+    --b-photo-frame: rgb(255 255 255 / 0.4);
+    --b-name-weight: 800;
+    --b-name-transform: none;
+    --b-name-tracking: -0.03em;
+    --b-name-size: clamp(2.75rem, 12vw, 4.75rem);
+  }
+
+  /* ---------- Style: Elegant ---------- */
+  .bp[data-bstyle="elegant"] {
+    --b-bg-a: #0a0a12;
+    --b-bg-b: #161420;
+    --b-glow: rgb(214 178 122 / 0.3);
+    --b-accent: #e8cf9a;
+    --b-accent-2: #c9a96a;
+    --b-card: rgb(232 207 154 / 0.06);
+    --b-card-border: rgb(232 207 154 / 0.26);
+    --b-radius: 1.25rem;
+    --b-photo-radius: 0.75rem;
+    --b-photo-shadow: 0 30px 54px -30px rgb(0 0 0 / 0.95);
+    --b-photo-frame: rgb(232 207 154 / 0.28);
+    --b-ink-soft: rgb(255 255 255 / 0.7);
+    --b-name-weight: 400;
+    --b-name-tracking: 0.06em;
+    --b-kicker-transform: uppercase;
+    --b-kicker-tracking: 0.34em;
+    --b-name-size: clamp(2.25rem, 9.5vw, 3.75rem);
+  }
+
+  /* ---------- Style: Fun & Crazy ---------- */
+  .bp[data-bstyle="fun-crazy"] {
+    --b-bg-a: #3a1040;
+    --b-bg-b: #4a1a12;
+    --b-glow: rgb(255 122 176 / 0.5);
+    --b-accent: #ffd23f;
+    --b-accent-2: #ff4d97;
+    --b-card: rgb(255 255 255 / 0.1);
+    --b-card-border: rgb(255 255 255 / 0.22);
+    --b-radius: 0.875rem;
+    --b-photo-radius: 1rem;
+    --b-photo-shadow: 0 20px 40px -20px rgb(0 0 0 / 0.85);
+    --b-photo-frame: rgb(255 255 255 / 0.3);
+    --b-name-weight: 800;
+    --b-name-transform: none;
+    --b-name-tracking: -0.045em;
+    --b-name-size: clamp(2.75rem, 12.5vw, 5rem);
+  }
+
+  /* ---------- Style: Cinematic ---------- */
+  .bp[data-bstyle="cinematic"] {
+    --b-bg-a: #05060c;
+    --b-bg-b: #0d1220;
+    --b-glow: rgb(59 123 255 / 0.28);
+    --b-accent: #93b4ff;
+    --b-accent-2: #e2e8f0;
+    --b-card: rgb(255 255 255 / 0.04);
+    --b-card-border: rgb(147 180 255 / 0.2);
+    --b-radius: 1.5rem;
+    --b-photo-radius: 0.5rem;
+    --b-photo-shadow: 0 40px 70px -34px rgb(0 0 0 / 1);
+    --b-photo-frame: rgb(147 180 255 / 0.24);
+    --b-ink-soft: rgb(226 232 240 / 0.76);
+    --b-name-weight: 700;
+    --b-name-transform: uppercase;
+    --b-name-tracking: 0.02em;
+    --b-kicker-transform: uppercase;
+    --b-kicker-tracking: 0.42em;
+    --b-name-size: clamp(2.5rem, 11.5vw, 4.5rem);
+  }
+
+  /* ---------- Shared sections ---------- */
+
+  .bp-inner {
+    position: relative;
+    z-index: 1;
+    padding: 2.5rem 1.25rem 2.75rem;
+  }
+
+  .bp-frame {
+    border-radius: var(--b-radius, 1.75rem);
+  }
+
+  @media (min-width: 40rem) {
+    .bp-inner {
+      padding: 3.5rem 2.5rem 4rem;
+    }
+  }
+
+  .bp-hero {
+    text-align: center;
+  }
+
+  .bp-kicker {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    line-height: 1.5;
+    letter-spacing: var(--b-kicker-tracking);
+    text-transform: var(--b-kicker-transform);
+    color: var(--b-kicker);
+  }
+
+  .bp-name {
+    margin: 0.5rem 0 0;
+    font-size: var(--b-name-size);
+    font-weight: var(--b-name-weight);
+    line-height: 1.04;
+    letter-spacing: var(--b-name-tracking);
+    text-transform: var(--b-name-transform);
+    color: var(--b-ink);
+    overflow-wrap: anywhere;
+  }
+
+  .bp-name-emoji {
+    display: inline-block;
+    margin-left: 0.35em;
+    transform-origin: 70% 70%;
+  }
+
+  .bp-rel {
+    margin: 1rem auto 0;
+    max-width: 34rem;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    color: var(--b-ink-soft);
+  }
+
+  .bp-card {
+    border-radius: var(--b-radius);
+    border: 1px solid var(--b-card-border);
+    background-color: var(--b-card);
+    padding: 1.5rem;
+  }
+
+  .bp-message {
+    margin: 0;
+    font-size: 1rem;
+    line-height: 1.85;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+    color: var(--b-ink);
+  }
+
+  .bp-label {
+    display: block;
+    margin-bottom: 0.75rem;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--b-ink-faint);
+  }
+
+  /* ---------- Gallery ---------- */
+
+  .bp-gallery {
+    display: grid;
+    gap: 0.625rem;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .bp-photo {
+    position: relative;
+    display: block;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: var(--b-photo-radius);
+    border: 1px solid var(--b-photo-frame);
+    background-color: rgb(0 0 0 / 0.25);
+    box-shadow: var(--b-photo-shadow);
+  }
+
+  .bp-photo img {
+    object-fit: cover;
+    /* Explicit rather than left to the initial value. `cover` crops to fill a
+       square from a landscape or portrait source, and which part survives is
+       what decides whether a face is visible or cropped out. Centring is the
+       only choice that is right often enough for a page the creator never
+       cropped by hand. */
+    object-position: center;
+    filter: var(--b-photo-filter);
+  }
+
+  .bp-gallery[data-count="1"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .bp-gallery[data-count="1"] .bp-photo {
+    aspect-ratio: 4 / 3;
+  }
+
+  .bp-gallery[data-count="3"] .bp-photo:first-child,
+  .bp-gallery[data-count="5"] .bp-photo:first-child,
+  .bp-gallery[data-count="6"] .bp-photo:first-child {
+    grid-column: span 2;
+    aspect-ratio: 16 / 9;
+  }
+
+  @media (min-width: 40rem) {
+    .bp-gallery {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 0.875rem;
+    }
+
+    .bp-gallery[data-count="1"] {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .bp-gallery[data-count="3"] .bp-photo:first-child,
+    .bp-gallery[data-count="5"] .bp-photo:first-child,
+    .bp-gallery[data-count="6"] .bp-photo:first-child {
+      grid-column: span 2;
+    }
+  }
+
+  /* ---------- Empty photo state (no stock or demo imagery) ---------- */
+
+  .bp-empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    border-radius: var(--b-photo-radius);
+    border: 1px dashed var(--b-photo-frame);
+    background-image: linear-gradient(
+      160deg,
+      var(--b-card) 0%,
+      transparent 100%
+    );
+    padding: 2.5rem 1.25rem;
+    text-align: center;
+  }
+
+  .bp-empty-mark {
+    display: grid;
+    place-items: center;
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    border: 1px solid var(--b-photo-frame);
+    background-color: var(--b-card);
+    font-size: 1.375rem;
+  }
+
+  .bp-empty-text {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: var(--b-ink-faint);
+  }
+
+  /* ---------- Compact fallback, inside a single photo tile ---------- */
+
+  /* A failed image drops its own <img> and renders this in the same tile, so it
+     has to fill the frame exactly rather than sit inside padding that only made
+     sense for the full-width empty gallery. */
+  .bp-photo > .bp-empty {
+    position: absolute;
+    inset: 0;
+    height: 100%;
+    padding: 0.75rem;
+  }
+
+  .bp-empty-mark-sm {
+    width: 1.75rem;
+    height: 1.75rem;
+    font-size: 0.875rem;
+  }
+
+  /* ---------- Closing ---------- */
+
+  .bp-closing {
+    margin-top: 2.25rem;
+    text-align: center;
+  }
+
+  .bp-closing-rule {
+    width: 3.5rem;
+    height: 2px;
+    margin: 0 auto 1.25rem;
+    border-radius: 9999px;
+    background-image: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--b-accent) 50%,
+      transparent 100%
+    );
+  }
+
+  .bp-closing-text {
+    margin: 0;
+    font-size: 1.0625rem;
+    line-height: 1.6rem;
+    color: var(--b-ink-soft);
+  }
+
+  .bp-closing-name {
+    color: var(--b-ink);
+    font-weight: 600;
+  }
+
+  .bp-meta {
+    margin: 1.75rem 0 0;
+    text-align: center;
+    font-size: 0.6875rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--b-ink-faint);
+  }
+
+  /* ---------- Decorations (never interactive, never overflow) ---------- */
+
+  .bp-decor {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    color: var(--b-accent);
+  }
+
+  .bp-decor > * {
+    position: absolute;
+    opacity: 0.5;
+  }
+
+  /*
+    Centered with `left` rather than `translateX(-50%)` so the bp-drift
+    animation's own transform composes instead of overriding the centering.
+    150% wide at left:-25% is exactly centred on the 100% parent.
+  */
+  .bp-spotlight {
+    left: -25%;
+    top: -20%;
+    width: 150%;
+    height: 90%;
+    opacity: 1;
+    background-image: radial-gradient(
+      50% 60% at 50% 0%,
+      rgb(255 255 255 / 0.16) 0%,
+      transparent 70%
+    );
+    pointer-events: none;
+  }
+
+  .bp-vignette {
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+    background-image: radial-gradient(
+      120% 90% at 50% 40%,
+      transparent 40%,
+      rgb(0 0 0 / 0.55) 100%
+    );
+    pointer-events: none;
+  }
+
+  /* ---------- Animations (base state is the visible state) ---------- */
+
+  .bp-rise {
+    animation: bp-rise 820ms cubic-bezier(0.22, 0.8, 0.3, 1) backwards;
+  }
+
+  .bp-fade {
+    animation: bp-fade 900ms ease backwards;
+  }
+
+  .bp-reveal {
+    animation: bp-reveal 780ms cubic-bezier(0.22, 0.8, 0.3, 1) backwards;
+  }
+
+  .bp-float {
+    animation: bp-float 7s ease-in-out infinite;
+  }
+
+  .bp-sway {
+    animation: bp-sway 5.5s ease-in-out infinite;
+  }
+
+  .bp-pop {
+    animation: bp-pop 620ms cubic-bezier(0.34, 1.56, 0.64, 1) backwards;
+  }
+
+  .bp-drift {
+    animation: bp-drift 18s ease-in-out infinite alternate;
+  }
+
+  .bp-spin-slow {
+    animation: bp-spin 22s linear infinite;
+  }
+
+  /* Per-style motion character */
+  .bp[data-bmotion="bouncy"] .bp-rise,
+  .bp[data-bmotion="bouncy"] .bp-reveal {
+    animation-timing-function: cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .bp[data-bmotion="energetic"] .bp-reveal {
+    animation-duration: 620ms;
+  }
+
+  .bp[data-bmotion="cinematic"] .bp-reveal {
+    animation-name: bp-cine-reveal;
+    animation-duration: 1100ms;
+  }
+
+  .bp[data-bmotion="cinematic"] .bp-rise {
+    animation-name: bp-cine-rise;
+    animation-duration: 1000ms;
+  }
+
+  /* Staggered entrances — delays only, never layout shifting */
+  .bp-d1 { animation-delay: 90ms; }
+  .bp-d2 { animation-delay: 180ms; }
+  .bp-d3 { animation-delay: 270ms; }
+  .bp-d4 { animation-delay: 360ms; }
+  .bp-d5 { animation-delay: 450ms; }
+  .bp-d6 { animation-delay: 540ms; }
+}
+
+@keyframes bp-rise {
+  from { opacity: 0; transform: translate3d(0, 18px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bp-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bp-reveal {
+  from { opacity: 0; transform: scale(0.94) translate3d(0, 10px, 0); }
+  to { opacity: 1; transform: none; }
+}
+
+@keyframes bp-cine-rise {
+  from { opacity: 0; transform: translate3d(0, 26px, 0); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes bp-cine-reveal {
+  from { opacity: 0; transform: scale(1.08); filter: blur(10px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+@keyframes bp-pop {
+  from { opacity: 0; transform: scale(0.6); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes bp-float {
+  0%, 100% { transform: translate3d(0, 0, 0); }
+  50% { transform: translate3d(0, -12px, 0); }
+}
+
+@keyframes bp-sway {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+  50% { transform: translate3d(6px, -8px, 0) rotate(6deg); }
+}
+
+@keyframes bp-drift {
+  from { transform: translate3d(-2%, -1%, 0) scale(1); }
+  to { transform: translate3d(2%, 2%, 0) scale(1.08); }
+}
+
+@keyframes bp-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* ==========================================================================
+   Phase 5 — Generate, share and public pages
+   --------------------------------------------------------------------------
+   Additive only. Every existing selector above is untouched, and none of these
+   rules restyle the preview: the saved page and the local preview are meant to
+   be the same design, so `.bp-*` is deliberately not redefined here.
+   ========================================================================== */
+
+/* The Generate action, directly beneath the Step 4 preview. */
+.bp-generate {
+  margin-top: 1.75rem;
+}
+
+@media (min-width: 640px) {
+  .bp-generate {
+    margin-top: 2.25rem;
+  }
+}
+
+/* Slightly taller than a nav button, and full-bleed on mobile so the primary
+   action is unmissable on a phone. */
+.bs-btn-generate {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+  font-size: 1rem;
+}
+
+@media (min-width: 640px) {
+  .bs-btn-generate {
+    width: auto;
+    min-width: 15rem;
+  }
+}
+
+.bs-generate-hint {
+  margin-top: 0.875rem;
+  text-align: center;
+}
+
+@media (min-width: 640px) {
+  .bs-generate-hint {
+    max-width: 34rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/* Failure message for the Generate action.
+   Reuses the blush error colour family so it is unmistakably the same voice as
+   the Step 1/3 field errors, but is a block-level alert because it is about the
+   whole submission rather than one field. */
+.bs-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.625rem;
+  margin-bottom: 1rem;
+  border: 1px solid rgb(255 158 181 / 0.28);
+  border-radius: 0.875rem;
+  background-color: rgb(255 158 181 / 0.08);
+  padding: 0.75rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.4rem;
+  color: var(--color-blush-300);
+}
+
+.bs-alert-mark {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 1.125rem;
+  height: 1.125rem;
+  margin-top: 0.0625rem;
+  border-radius: 9999px;
+  background-color: rgb(255 158 181 / 0.22);
+  font-size: 0.6875rem;
+  font-weight: 700;
+}
+
+/* Busy indicator. A border spin rather than a pulsing dot, because the button
+   label is already changing and two simultaneous motions read as glitchy. */
+.bs-spinner {
+  width: 1rem;
+  height: 1rem;
+  flex: none;
+  border-radius: 9999px;
+  border: 2px solid rgb(255 255 255 / 0.28);
+  border-top-color: rgb(255 255 255 / 0.95);
+  animation: bp-spin 720ms linear infinite;
+}
+
+/* The shareable link. A readonly input rather than a <p> so the browser's own
+   text selection, long-press and "copy link" affordances all work, and so a
+   visitor whose clipboard is blocked still has something selectable. */
+.bs-share-url {
+  margin-top: 1.5rem;
+}
+
+.bs-share-url-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  color: rgb(255 255 255 / 0.55);
+}
+
+.bs-share-url-input {
+  width: 100%;
+  border-radius: 0.875rem;
+  border: 1px solid rgb(255 255 255 / 0.12);
+  background-color: rgb(4 5 13 / 0.6);
+  padding: 0.875rem 1rem;
+  font-family: var(--font-geist-mono), ui-monospace, monospace;
+  font-size: 0.875rem;
+  line-height: 1.5rem;
+  color: rgb(255 255 255 / 0.92);
+}
+
+.bs-share-url-input:focus-visible {
+  outline: 2px solid var(--color-lilac-300);
+  outline-offset: 2px;
+}
+
+/* Reserved height so the copy confirmation does not shift the buttons below it
+   when it appears. */
+.bs-share-status {
+  min-height: 1.25rem;
+  margin-top: 0.625rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  color: var(--color-lilac-200);
+}
+
+@supports (min-height: 1lh) {
+  .bs-share-status {
+    min-height: 1.25lh;
+  }
+}
+
+/* Honest limits, stated after the action rather than before it: a link-only
+   product with no account has real consequences for the person who created it. */
+.bs-share-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.625rem;
+  margin-top: 1.75rem;
+  border-radius: 0.875rem;
+  border: 1px solid rgb(255 255 255 / 0.08);
+  background-color: rgb(255 255 255 / 0.03);
+  padding: 0.875rem 1rem;
+  font-size: 0.8125rem;
+  line-height: 1.4rem;
+  color: rgb(255 255 255 / 0.62);
+}
+
+.bs-share-note strong {
+  font-weight: 600;
+  color: rgb(255 255 255 / 0.82);
+}
+
+/*
+  Reduced motion: drop animations entirely rather than shortening them, so
+  every element stays in its visible base state instead of freezing mid-frame.
+*/
+@media (prefers-reduced-motion: reduce) {
+  .bp,
+  .bp *,
+  .bp *::before,
+  .bp *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* The Generate spinner is the one place where removing motion outright would
+     leave no feedback at all, so it falls back to a static ring. The button
+     label already says "Creating your birthday page…", so the meaning does not
+     depend on the animation. */
+  .bs-spinner {
+    animation: none !important;
+    border-top-color: rgb(255 255 255 / 0.95);
+    border-right-color: rgb(255 255 255 / 0.95);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
