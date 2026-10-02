@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import type { PhotoItem } from "@/lib/birthday";
 import BirthdayPhotoFallback from "./birthday-photo-fallback";
 
@@ -14,25 +13,23 @@ import BirthdayPhotoFallback from "./birthday-photo-fallback";
  * mean shipping the whole gallery's worth of image state to the browser as
  * props. Keeping it here is the cheapest place for it.
  *
- * The frame element carries all the geometry. Aspect ratios differ by gallery
- * shape -- square by default, 4:3 for a lone photo, 16:9 for the lead tile in
- * some counts -- and those are expressed in CSS keyed off `data-count`, so this
- * component does not try to know which layout it has landed in. Marking it as a
- * plain `figure` with no aspect ratio of its own keeps a change to that CSS from
- * requiring a change here.
+ * The frame element carries the geometry: a rounded card with no aspect ratio
+ * of its own, so every photo renders at its original aspect ratio. Only the
+ * grid's column span differs by `data-count`, and that is expressed in CSS
+ * keyed off the value, so this component does not try to know which layout it
+ * has landed in. Marking it as a plain `figure` with no aspect ratio of its own
+ * keeps a change to that CSS from requiring a change here.
  */
 export default function BirthdayPhotoFrame({
   photo,
   alt,
   emoji,
-  sizes,
   priority = false,
 }: {
   photo: PhotoItem;
   alt: string;
   /** Used for the fallback mark, so a broken tile matches the page's style. */
   emoji: string;
-  sizes: string;
   /** Set on the lead tile so the browser is not told to lazy-load it. */
   priority?: boolean;
 }) {
@@ -55,15 +52,19 @@ export default function BirthdayPhotoFrame({
       {failed ? (
         <BirthdayPhotoFallback emoji={emoji} compact />
       ) : (
-        <Image
+        // A plain <img> instead of next/image `fill`: the uploads have unknown
+        // intrinsic dimensions, and the frame must never impose a box or crop on
+        // them. `fill` absolutely positioned the image inside an aspect-ratio
+        // frame and, together with object-fit: cover, cropped every photo to the
+        // frame's shape. Without `fill` the image flows at its natural aspect
+        // ratio (sized in CSS) and is never clipped or distorted.
+        // eslint-disable-next-line @next/next/no-img-element -- intrinsic dimensions are unknown per upload; next/image `fill` is the fixed-box crop this change removes
+        <img
           src={photo.url}
           alt={alt}
-          fill
-          unoptimized
-          priority={priority}
-          sizes={sizes}
-          // A blank space where a photo should be reads as a loading state and
-          // then never resolves, which is worse than an explicit fallback.
+          loading={priority ? "eager" : "lazy"}
+          fetchPriority={priority ? "high" : "auto"}
+          // A blank image that never resolves reads worse than the fallback.
           onError={() => setFailed(true)}
         />
       )}

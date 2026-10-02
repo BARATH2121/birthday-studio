@@ -547,7 +547,6 @@
   .bp-photo {
     position: relative;
     display: block;
-    aspect-ratio: 1 / 1;
     overflow: hidden;
     border-radius: var(--b-photo-radius);
     border: 1px solid var(--b-photo-frame);
@@ -555,14 +554,17 @@
     box-shadow: var(--b-photo-shadow);
   }
 
+  /* Photos render at their original aspect ratio. No fixed box on the frame and
+     no object-fit here: the image sizes itself from its intrinsic dimensions,
+     capped by the column and by a responsive height so a very tall portrait can
+     never blow out the page. Nothing is cropped or stretched. */
   .bp-photo img {
-    object-fit: cover;
-    /* Explicit rather than left to the initial value. `cover` crops to fill a
-       square from a landscape or portrait source, and which part survives is
-       what decides whether a face is visible or cropped out. Centring is the
-       only choice that is right often enough for a page the creator never
-       cropped by hand. */
-    object-position: center;
+    display: block;
+    width: auto;
+    max-width: 100%;
+    height: auto;
+    max-height: min(85vh, 56rem);
+    margin-inline: auto;
     filter: var(--b-photo-filter);
   }
 
@@ -570,15 +572,10 @@
     grid-template-columns: minmax(0, 1fr);
   }
 
-  .bp-gallery[data-count="1"] .bp-photo {
-    aspect-ratio: 4 / 3;
-  }
-
   .bp-gallery[data-count="3"] .bp-photo:first-child,
   .bp-gallery[data-count="5"] .bp-photo:first-child,
   .bp-gallery[data-count="6"] .bp-photo:first-child {
     grid-column: span 2;
-    aspect-ratio: 16 / 9;
   }
 
   @media (min-width: 40rem) {
@@ -855,6 +852,192 @@
   to { transform: rotate(360deg); }
 }
 
+/* --------------------------------------------------------------------------
+   Premium style effects (additive to the `.bp` token system)
+   --------------------------------------------------------------------------
+   The live 3D scenes mount in `.bp-scene` behind the content. Two pseudo
+   layers add depth on top: a soft bloom behind everything and, for cinematic,
+   a film-grain veil over the scene but under the text.
+   -------------------------------------------------------------------------- */
+
+@layer components {
+  .bp-scene {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+    animation: bp-fade 800ms ease backwards;
+  }
+
+  .bp-scene canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .bp::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image: radial-gradient(
+      46rem 30rem at 50% -18%,
+      var(--b-bloom, rgb(255 255 255 / 0.05)),
+      transparent 62%
+    );
+  }
+
+  .bp[data-bstyle="romantic"] {
+    --b-bloom: rgb(255 122 176 / 0.16);
+  }
+
+  .bp[data-bstyle="cute-colorful"] {
+    --b-bloom: rgb(124 224 184 / 0.12);
+  }
+
+  .bp[data-bstyle="elegant"] {
+    --b-bloom: rgb(232 207 154 / 0.12);
+  }
+
+  .bp[data-bstyle="fun-crazy"] {
+    --b-bloom: rgb(255 210 63 / 0.12);
+  }
+
+  .bp[data-bstyle="cinematic"] {
+    --b-bloom: rgb(147 180 255 / 0.1);
+  }
+
+  .bp[data-bstyle="cinematic"]::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    border-radius: inherit;
+    pointer-events: none;
+    opacity: 0.09;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .bp {
+    transition:
+      border-radius 500ms ease,
+      box-shadow 500ms ease;
+  }
+
+  /* ---------- Style picker artwork (create flow Step 3) ---------- */
+
+  .bs-style-art {
+    position: relative;
+    overflow: hidden;
+    background-size: 190% 190%;
+    animation: bs-art-drift 10s ease-in-out infinite alternate;
+  }
+
+  .bs-style-art::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: linear-gradient(
+      120deg,
+      transparent 30%,
+      rgb(255 255 255 / 0.28) 50%,
+      transparent 70%
+    );
+    transform: translateX(-70%);
+    animation: bs-sheen-sweep 5.5s ease-in-out infinite;
+  }
+
+  .bs-style-art--romantic {
+    background-image: linear-gradient(140deg, #ff7ab0 0%, #c084fc 100%);
+  }
+
+  .bs-style-art--cute-colorful {
+    background-image: linear-gradient(140deg, #ff8fc0 0%, #7ce0b8 50%, #6ba3ff 100%);
+  }
+
+  .bs-style-art--elegant {
+    background-image: linear-gradient(140deg, #241b2e 0%, #8a6c3f 55%, #d9bb7d 100%);
+  }
+
+  .bs-style-art--fun-crazy {
+    background-image: linear-gradient(140deg, #ff4d97 0%, #a855f7 45%, #ffd23f 100%);
+  }
+
+  .bs-style-art--cinematic {
+    background-image: linear-gradient(140deg, #05060c 0%, #0d1220 55%, #3b5bbf 100%);
+  }
+
+  .bs-style-glyph {
+    animation: bs-glyph-float 4.5s ease-in-out infinite;
+  }
+
+  /* ---------- Cinematic poster picker (create flow Step 3) ---------- */
+
+  .bs-pick {
+    position: relative;
+    overflow: hidden;
+    background:
+      radial-gradient(
+        36rem 22rem at 82% -14%,
+        var(--p-glow, rgb(147 180 255 / 0.16)),
+        transparent 62%
+      ),
+      linear-gradient(155deg, var(--color-night-800), var(--color-night-950) 72%);
+  }
+
+  .bs-pick::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    opacity: 0.05;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .bs-pick-stage {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .bs-pick-stage > .bp-scene {
+    z-index: 1;
+  }
+
+  .bs-pick-stage::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    pointer-events: none;
+    background: linear-gradient(
+      180deg,
+      rgb(4 5 13 / 0.24) 0%,
+      transparent 38%,
+      rgb(4 5 13 / 0.72) 100%
+    );
+  }
+}
+
+@keyframes bs-art-drift {
+  from { background-position: 0% 50%; }
+  to { background-position: 100% 50%; }
+}
+
+@keyframes bs-sheen-sweep {
+  0% { transform: translateX(-70%); }
+  60%, 100% { transform: translateX(70%); }
+}
+
+@keyframes bs-glyph-float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50% { transform: translateY(-5px) rotate(6deg); }
+}
+
 /* ==========================================================================
    Phase 5 — Generate, share and public pages
    --------------------------------------------------------------------------
@@ -975,7 +1158,7 @@
 }
 
 .bs-share-url-input:focus-visible {
-  outline: 2px solid var(--color-lilac-300);
+  outline: 2px solid var(--color-blush-400);
   outline-offset: 2px;
 }
 
@@ -986,7 +1169,7 @@
   margin-top: 0.625rem;
   font-size: 0.8125rem;
   line-height: 1.25rem;
-  color: var(--color-lilac-200);
+  color: var(--color-blush-300);
 }
 
 @supports (min-height: 1lh) {

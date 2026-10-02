@@ -5,6 +5,7 @@ import BirthdayDecorations from "./birthday-decorations";
 import BirthdayGallery from "./birthday-gallery";
 import BirthdayHero from "./birthday-hero";
 import BirthdayMessage from "./birthday-message";
+import BirthdayScene from "./birthday-scene";
 import { themeFor } from "./style-theme";
 
 export default function BirthdayPage({ draft }: { draft: BirthdayDraft }) {
@@ -20,6 +21,10 @@ export default function BirthdayPage({ draft }: { draft: BirthdayDraft }) {
       aria-label={`${theme.name} birthday preview for ${name}`}
     >
       <BirthdayDecorations kind={theme.decorations} />
+      <BirthdayScene
+        key={theme.scene.kind}
+        scene={theme.scene}
+      />
 
       <div className="bp-inner">
         <BirthdayHero

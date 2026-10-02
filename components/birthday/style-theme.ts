@@ -14,12 +14,64 @@ export type MotionKind =
   | "energetic"
   | "cinematic";
 
+/**
+ * Which live 3D scene a style gets. Each scene is a small procedural sketch
+ * that fills the birthday card and reacts to the cursor, so five styles read
+ * as five different rooms rather than one background recoloured five times.
+ */
+export type SceneKind =
+  | "petals"
+  | "balloons"
+  | "orbits"
+  | "confetti"
+  | "beam";
+
+/** How many particles a scene uses. Keep the top end sensible for phones. */
+export type SceneDensity = "low" | "medium" | "high";
+
+export type SceneConfig = {
+  kind: SceneKind;
+  /** Colour seeds for the scene's particles and forms. */
+  colors: readonly string[];
+  /** Converts a capsule of the product's "mood" without changing its identity. */
+  density: SceneDensity;
+};
+
 export type StyleTheme = {
   id: BirthdayStyleId;
   name: string;
   emoji: string;
   decorations: DecorationKind;
   motion: MotionKind;
+  scene: SceneConfig;
+};
+
+const SCENES: Record<BirthdayStyleId, SceneConfig> = {
+  romantic: {
+    kind: "petals",
+    colors: ["#ff7ab0", "#ff4d97", "#ffa3c9", "#fff1f7"],
+    density: "medium",
+  },
+  "cute-colorful": {
+    kind: "balloons",
+    colors: ["#ff8fc0", "#6ba3ff", "#c084fc", "#ffd23f", "#7ce0b8"],
+    density: "medium",
+  },
+  elegant: {
+    kind: "orbits",
+    colors: ["#f6ecd0", "#e8cf9a", "#c9a96a", "#ffffff"],
+    density: "low",
+  },
+  "fun-crazy": {
+    kind: "confetti",
+    colors: ["#ff4d97", "#3b7bff", "#ffd23f", "#a855f7", "#ff7a3d", "#3ddc97"],
+    density: "high",
+  },
+  cinematic: {
+    kind: "beam",
+    colors: ["#93b4ff", "#e2e8f0", "#5f7bd6", "#c8d6ff"],
+    density: "medium",
+  },
 };
 
 const DECORATIONS: Record<BirthdayStyleId, DecorationKind> = {
@@ -50,5 +102,6 @@ export function themeFor(style: BirthdayStyleId | "" | null | undefined): StyleT
     emoji: base.emoji,
     decorations: DECORATIONS[base.id],
     motion: MOTIONS[base.id],
+    scene: SCENES[base.id],
   };
 }
