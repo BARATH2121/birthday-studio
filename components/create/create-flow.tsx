@@ -227,13 +227,16 @@ export default function CreateFlow() {
       ? "Edit information"
       : step === 2 && draft.photos.length === 0
         ? "Continue without photos"
-        : "Next step";
+        : "Continue";
 
   const primaryAction = isPreview ? goEdit : goNext;
 
   return (
-    <div className="bs-shell flex-1 pb-36 pt-8 sm:pb-32 sm:pt-12">
-      <div className="mx-auto w-full max-w-2xl">
+    <div
+      className="bs-shell flex-1 pb-36 pt-8 sm:pb-32 sm:pt-12"
+      data-bstyle={draft.style || undefined}
+    >
+      <div className="mx-auto w-full max-w-4xl">
         <StepIndicator current={step} />
 
         <div
@@ -251,7 +254,7 @@ export default function CreateFlow() {
               <h1
                 ref={headingRef}
                 tabIndex={-1}
-                className="mt-5 text-2xl font-semibold leading-[1.15] tracking-tight text-white sm:text-3xl"
+                className="mt-5 text-[1.75rem] font-bold leading-[1.1] tracking-tight text-white sm:text-[2.5rem]"
               >
                 {current.title}
               </h1>

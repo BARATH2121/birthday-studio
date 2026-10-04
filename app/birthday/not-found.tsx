@@ -1,5 +1,4 @@
 import Link from "next/link";
-import BrandLink from "@/components/brand-link";
 
 /**
  * Shown for a birthday link that does not resolve.
@@ -11,13 +10,7 @@ import BrandLink from "@/components/brand-link";
  */
 export default function BirthdayNotFound() {
   return (
-    <>
-      <header className="border-b border-white/10">
-        <div className="bs-shell flex h-16 items-center sm:h-18">
-          <BrandLink />
-        </div>
-      </header>
-      <main id="main" className="bs-shell flex flex-1 items-center justify-center py-10 sm:py-14">
+    <main id="main" className="bs-shell flex flex-1 items-center justify-center py-10 sm:py-14">
         <section className="bs-card w-full max-w-md rounded-[1.75rem] p-6 text-center sm:p-8">
           <p className="bs-eyebrow justify-center">Not found</p>
 
@@ -40,7 +33,6 @@ export default function BirthdayNotFound() {
             </Link>
           </div>
         </section>
-      </main>
-    </>
+    </main>
   );
 }

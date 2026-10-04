@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import Link from "next/link";
-import BrandLink from "@/components/brand-link";
 
 /**
  * Error boundary for the public birthday route.
@@ -26,13 +25,7 @@ export default function BirthdayError({
   }, [error]);
 
   return (
-    <>
-      <header className="border-b border-white/10">
-        <div className="bs-shell flex h-16 items-center sm:h-18">
-          <BrandLink />
-        </div>
-      </header>
-      <main id="main" className="bs-shell flex flex-1 items-center justify-center py-10 sm:py-14">
+    <main id="main" className="bs-shell flex flex-1 items-center justify-center py-10 sm:py-14">
       <section className="bs-card w-full max-w-md rounded-[1.75rem] p-6 text-center sm:p-8">
         <h1 className="text-2xl font-semibold tracking-tight text-white">
           This page didn&apos;t load
@@ -51,7 +44,6 @@ export default function BirthdayError({
           </Link>
         </div>
       </section>
-      </main>
-    </>
+    </main>
   );
 }

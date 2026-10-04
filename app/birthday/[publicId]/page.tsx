@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 import { createServerSupabase } from "@/lib/supabase/server";
 import { getAdminSupabase } from "@/lib/supabase/admin";
 import {
@@ -13,7 +12,6 @@ import {
   type BirthdayPageRow,
 } from "@/lib/birthday-page";
 import BirthdayPage from "@/components/birthday/birthday-page";
-import BrandLink from "@/components/brand-link";
 
 /**
  * How long a signed audio URL stays playable.
@@ -76,30 +74,6 @@ async function signAudioUrl(
   }
 
   return data.signedUrl;
-}
-
-/**
- * Minimal chrome for the surprise page.
- *
- * Deliberately not the marketing `SiteHeader`: the person opening this link is
- * the birthday guest, not a prospective customer, so a nav, a "Create Birthday"
- * CTA and a footer would all compete with the actual message. Just the brand, so
- * there is a visible way home if they do want one.
- */
-function GuestHeader() {
-  return (
-    <header className="border-b border-white/10">
-      <div className="bs-shell flex h-16 items-center justify-between gap-4 sm:h-18">
-        <BrandLink />
-        <Link
-          href="/"
-          className="bs-btn bs-btn-ghost px-4 py-2 text-xs sm:text-sm"
-        >
-          Birthday Studio
-        </Link>
-      </div>
-    </header>
-  );
 }
 
 /**
@@ -169,18 +143,11 @@ export default async function BirthdaySharePage({
   }
 
   return (
-    <>
-      <GuestHeader />
-      <main
-        id="main"
-        className="bs-shell relative flex-1 overflow-hidden py-8 sm:py-14"
-      >
-        <div aria-hidden="true" className="bs-guest-backdrop" />
-        <div className="relative mx-auto w-full max-w-4xl">
-          <BirthdayPage draft={birthday.draft} />
-        </div>
-      </main>
-    </>
+    <main id="main" className="bs-shell flex-1 py-8 sm:py-12">
+      <div className="mx-auto w-full max-w-2xl">
+        <BirthdayPage draft={birthday.draft} />
+      </div>
+    </main>
   );
 }
 
@@ -191,10 +158,8 @@ export default async function BirthdaySharePage({
  */
 function SetupNotice() {
   return (
-    <>
-      <GuestHeader />
-      <main id="main" className="bs-shell flex-1 py-10 sm:py-14">
-        <section className="bs-card mx-auto w-full max-w-md rounded-[1.75rem] p-6 sm:p-8">
+    <main id="main" className="bs-shell flex-1 py-10 sm:py-14">
+      <section className="bs-card mx-auto w-full max-w-md rounded-[1.75rem] p-6 sm:p-8">
           <h1 className="text-2xl font-semibold tracking-tight text-white">
             Birthday pages are not connected yet
           </h1>
@@ -219,7 +184,6 @@ function SetupNotice() {
           </p>
         </section>
       </main>
-    </>
   );
 }
 

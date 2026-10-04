@@ -121,7 +121,7 @@ export default function StepDetails({
         onChange={(value) => onChange({ message: value })}
         onBlur={() => onBlur("message")}
         error={errors.message}
-        placeholder="Write something they'd love reading on their birthday."
+        placeholder="Write something meaningful..."
         maxLength={MESSAGE_MAX_LENGTH}
         counter={
           <span

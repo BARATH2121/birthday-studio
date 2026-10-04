@@ -11,8 +11,8 @@ export type Step = {
 };
 
 export const NAV_ITEMS: readonly NavItem[] = [
-  { label: "Preview", href: "#preview" },
-  { label: "How it works", href: "#how-it-works" },
+  { label: "Preview", href: "/#preview" },
+  { label: "How it works", href: "/#how-it-works" },
 ];
 
 export const HERO_HIGHLIGHTS: readonly string[] = [

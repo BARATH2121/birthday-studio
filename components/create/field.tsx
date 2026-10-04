@@ -27,7 +27,7 @@ function FieldShell({ id, label, error, hint, hideLabel, children }: FieldShellP
         {label}
       </label>
 
-      <div className={hideLabel ? "" : "mt-2"}>{children(describedBy)}</div>
+      <div className={hideLabel ? "" : "mt-2.5"}>{children(describedBy)}</div>
 
       {error ? (
         <p className="bs-error mt-2" id={errorId} role="alert">
@@ -203,12 +203,12 @@ export function TextAreaField({
   return (
     <FieldShell id={id} label={label} error={error} hint={hint}>
       {(describedBy) => (
-        <>
+        <div className="relative">
           <textarea
             id={id}
             name={id}
             rows={5}
-            className="bs-control min-h-32 resize-y"
+            className="bs-control min-h-32 resize-y pb-10 sm:min-h-36"
             value={value}
             placeholder={placeholder}
             maxLength={maxLength}
@@ -219,8 +219,10 @@ export function TextAreaField({
             }
             onBlur={onBlur}
           />
-          <div className="mt-2 flex justify-end">{counter}</div>
-        </>
+          <div className="pointer-events-none absolute bottom-3 right-3">
+            {counter}
+          </div>
+        </div>
       )}
     </FieldShell>
   );

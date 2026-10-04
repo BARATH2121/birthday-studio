@@ -2,20 +2,14 @@
 
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
-import ActionLink from "./action-link";
+import CreateCta from "./create-cta";
 import type { NavItem } from "@/lib/site-content";
 
 type MobileNavProps = {
   items: readonly NavItem[];
-  ctaLabel: string;
-  ctaLabelShort: string;
 };
 
-export default function MobileNav({
-  items,
-  ctaLabel,
-  ctaLabelShort,
-}: MobileNavProps) {
+export default function MobileNav({ items }: MobileNavProps) {
   const [open, setOpen] = useState(false);
   const panelId = useId();
 
@@ -32,10 +26,7 @@ export default function MobileNav({
 
   return (
     <div className="flex items-center gap-2">
-      <ActionLink href="/create" className="px-4 py-2.5 text-sm">
-        <span className="sm:hidden">{ctaLabelShort}</span>
-        <span className="hidden sm:inline">{ctaLabel}</span>
-      </ActionLink>
+      <CreateCta short className="px-4 py-2.5 text-sm" />
 
       <button
         type="button"
@@ -79,9 +70,7 @@ export default function MobileNav({
               {item.label}
             </Link>
           ))}
-          <ActionLink href="/create" className="mt-2 w-full">
-            {ctaLabel}
-          </ActionLink>
+          <CreateCta className="mt-2 w-full" />
         </nav>
       </div>
     </div>

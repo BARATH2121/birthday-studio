@@ -77,6 +77,7 @@
     background:
       radial-gradient(58rem 38rem at 10% -12%, rgb(255 77 151 / 0.22), transparent 62%),
       radial-gradient(52rem 36rem at 92% -6%, rgb(168 85 247 / 0.2), transparent 64%),
+      radial-gradient(46rem 30rem at 50% 18%, rgb(96 165 250 / 0.1), transparent 60%),
       radial-gradient(70rem 44rem at 50% 112%, rgb(59 123 255 / 0.16), transparent 62%);
   }
 
@@ -95,11 +96,15 @@
     border: 1px solid rgb(255 255 255 / 0.08);
     background-color: rgb(16 20 44 / 0.62);
     backdrop-filter: blur(18px);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      inset 0 -1px 0 rgb(0 0 0 / 0.2);
   }
 
   .bs-sheen {
     background-image:
       radial-gradient(120% 90% at 50% 0%, rgb(255 77 151 / 0.2), transparent 62%),
+      radial-gradient(80% 70% at 12% 100%, rgb(168 85 247 / 0.16), transparent 60%),
       radial-gradient(110% 90% at 88% 100%, rgb(59 123 255 / 0.18), transparent 60%);
   }
 
@@ -257,7 +262,7 @@
   .bs-label {
     display: block;
     font-size: 0.875rem;
-    font-weight: 500;
+    font-weight: 600;
     line-height: 1.25rem;
     color: rgb(255 255 255 / 0.84);
   }
@@ -265,9 +270,10 @@
   .bs-control {
     display: block;
     width: 100%;
-    border-radius: 0.875rem;
+    border-radius: 1rem;
     border: 1px solid rgb(255 255 255 / 0.1);
-    background-color: rgb(8 10 25 / 0.86);
+    background-color: rgb(255 255 255 / 0.04);
+    box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.05);
     padding: 0.8125rem 1rem;
     font-family: inherit;
     font-size: 0.95rem;
@@ -275,7 +281,8 @@
     color: #ffffff;
     transition:
       border-color 200ms ease,
-      background-color 200ms ease;
+      background-color 200ms ease,
+      box-shadow 200ms ease;
   }
 
   .bs-control::placeholder {
@@ -284,11 +291,16 @@
 
   .bs-control:hover {
     border-color: rgb(255 255 255 / 0.18);
+    background-color: rgb(255 255 255 / 0.055);
   }
 
   .bs-control:focus {
-    border-color: rgb(255 77 151 / 0.6);
-    background-color: rgb(11 14 33 / 0.92);
+    border-color: rgb(255 77 151 / 0.55);
+    background-color: rgb(255 255 255 / 0.055);
+    box-shadow:
+      inset 0 1px 0 rgb(255 255 255 / 0.05),
+      0 0 0 4px rgb(255 77 151 / 0.14),
+      0 14px 34px -18px rgb(255 77 151 / 0.6);
   }
 
   .bs-control[aria-invalid="true"] {
@@ -308,6 +320,56 @@
     font-size: 0.75rem;
     line-height: 1.15rem;
     color: var(--color-blush-300);
+  }
+
+  /* ---------- Phase 2 — photo picker ---------- */
+
+  .bs-dropzone-glow {
+    background-image: radial-gradient(
+      85% 130% at 50% 0%,
+      rgb(255 77 151 / 0.13),
+      rgb(168 85 247 / 0.05) 55%,
+      transparent 75%
+    );
+  }
+
+  .bs-dropzone-sheen {
+    background-image: linear-gradient(
+      115deg,
+      transparent 22%,
+      rgb(255 255 255 / 0.05) 38%,
+      rgb(255 255 255 / 0.09) 46%,
+      rgb(255 255 255 / 0.05) 54%,
+      transparent 72%
+    );
+    background-size: 220% 100%;
+    background-position: 130% 0;
+    animation: bs-sheen-drift 7s ease-in-out infinite;
+  }
+
+  .bs-photo-tile {
+    box-shadow:
+      0 20px 44px -24px rgb(0 0 0 / 0.85),
+      inset 0 1px 0 rgb(255 255 255 / 0.06),
+      0 0 30px -16px rgb(168 85 247 / 0.5);
+  }
+
+  @keyframes bs-sheen-drift {
+    0%,
+    50% {
+      background-position: 130% 0;
+    }
+    85%,
+    100% {
+      background-position: -40% 0;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .bs-dropzone-sheen {
+      animation: none;
+      background-position: 130% 0;
+    }
   }
 }
 
@@ -458,7 +520,7 @@
   .bp-inner {
     position: relative;
     z-index: 1;
-    padding: 2rem 1.25rem 2.75rem;
+    padding: 2.5rem 1.25rem 2.75rem;
   }
 
   .bp-frame {
@@ -467,86 +529,7 @@
 
   @media (min-width: 40rem) {
     .bp-inner {
-      padding: 2.75rem 2.5rem 4rem;
-    }
-  }
-
-  /* ---------- Cinematic hero artwork: the 3D scene is the poster art ---------- */
-
-  .bp-hero-art {
-    --b-hero-aura: rgb(147 180 255 / 0.16);
-
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    min-height: min(54vh, 26rem);
-    overflow: hidden;
-    border-bottom: 1px solid var(--b-card-border);
-    border-radius: var(--b-radius) var(--b-radius) 0 0;
-    background-image:
-      radial-gradient(130% 110% at 50% -18%, var(--b-glow) 0%, transparent 55%),
-      radial-gradient(74% 62% at 82% 16%, var(--b-hero-aura) 0%, transparent 58%),
-      linear-gradient(175deg, var(--b-bg-a) 0%, var(--b-bg-b) 100%);
-    box-shadow: 0 34px 70px -42px var(--b-glow);
-  }
-
-  .bp[data-bstyle="romantic"] { --b-hero-aura: rgb(255 56 108 / 0.24); }
-  .bp[data-bstyle="cute-colorful"] { --b-hero-aura: rgb(74 222 234 / 0.22); }
-  .bp[data-bstyle="elegant"] { --b-hero-aura: rgb(232 207 154 / 0.18); }
-  .bp[data-bstyle="fun-crazy"] { --b-hero-aura: rgb(168 85 247 / 0.24); }
-  .bp[data-bstyle="cinematic"] { --b-hero-aura: rgb(67 126 255 / 0.24); }
-
-  .bp-hero-shade {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: linear-gradient(
-      180deg,
-      rgb(4 5 13 / 0) 34%,
-      rgb(4 5 13 / 0.18) 58%,
-      rgb(4 5 13 / 0.62) 84%,
-      var(--b-bg-b) 100%
-    );
-  }
-
-  .bp-hero-divider {
-    position: absolute;
-    inset-inline: 0;
-    bottom: 0;
-    z-index: 0;
-    height: 2px;
-    pointer-events: none;
-    background-image: linear-gradient(
-      90deg,
-      transparent 4%,
-      var(--b-accent) 50%,
-      transparent 96%
-    );
-    opacity: 0.5;
-  }
-
-  .bp-hero-type {
-    position: relative;
-    z-index: 1;
-    padding: 2.5rem 1.5rem 1.75rem;
-    text-align: center;
-    pointer-events: none;
-  }
-
-  .bp-hero-type .bp-name,
-  .bp-hero-type .bp-rel {
-    text-shadow: 0 2px 22px rgb(4 5 13 / 0.6);
-  }
-
-  @media (min-width: 40rem) {
-    .bp-hero-art {
-      min-height: clamp(21rem, 46vh, 30rem);
-    }
-
-    .bp-hero-type {
-      padding: 3.5rem 2.5rem 2.25rem;
+      padding: 3.5rem 2.5rem 4rem;
     }
   }
 
@@ -594,11 +577,6 @@
     border: 1px solid var(--b-card-border);
     background-color: var(--b-card);
     padding: 1.5rem;
-    backdrop-filter: blur(16px) saturate(1.15);
-    -webkit-backdrop-filter: blur(16px) saturate(1.15);
-    box-shadow:
-      inset 0 1px 0 rgb(255 255 255 / 0.08),
-      0 24px 48px -28px rgb(0 0 0 / 0.75);
   }
 
   .bp-message {
@@ -636,17 +614,6 @@
     border: 1px solid var(--b-photo-frame);
     background-color: rgb(0 0 0 / 0.25);
     box-shadow: var(--b-photo-shadow);
-  }
-
-  .bp-photo::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    border: 1px solid var(--b-photo-frame);
-    opacity: 0.65;
   }
 
   /* Photos render at their original aspect ratio. No fixed box on the frame and
@@ -947,192 +914,6 @@
   to { transform: rotate(360deg); }
 }
 
-/* --------------------------------------------------------------------------
-   Premium style effects (additive to the `.bp` token system)
-   --------------------------------------------------------------------------
-   The live 3D scenes mount in `.bp-scene` behind the content. Two pseudo
-   layers add depth on top: a soft bloom behind everything and, for cinematic,
-   a film-grain veil over the scene but under the text.
-   -------------------------------------------------------------------------- */
-
-@layer components {
-  .bp-scene {
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    overflow: hidden;
-    pointer-events: none;
-    animation: bp-fade 800ms ease backwards;
-  }
-
-  .bp-scene canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-  }
-
-  .bp::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    pointer-events: none;
-    background-image: radial-gradient(
-      46rem 30rem at 50% -18%,
-      var(--b-bloom, rgb(255 255 255 / 0.05)),
-      transparent 62%
-    );
-  }
-
-  .bp[data-bstyle="romantic"] {
-    --b-bloom: rgb(255 122 176 / 0.16);
-  }
-
-  .bp[data-bstyle="cute-colorful"] {
-    --b-bloom: rgb(124 224 184 / 0.12);
-  }
-
-  .bp[data-bstyle="elegant"] {
-    --b-bloom: rgb(232 207 154 / 0.12);
-  }
-
-  .bp[data-bstyle="fun-crazy"] {
-    --b-bloom: rgb(255 210 63 / 0.12);
-  }
-
-  .bp[data-bstyle="cinematic"] {
-    --b-bloom: rgb(147 180 255 / 0.1);
-  }
-
-  .bp[data-bstyle="cinematic"]::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 0;
-    border-radius: inherit;
-    pointer-events: none;
-    opacity: 0.09;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  .bp {
-    transition:
-      border-radius 500ms ease,
-      box-shadow 500ms ease;
-  }
-
-  /* ---------- Style picker artwork (create flow Step 3) ---------- */
-
-  .bs-style-art {
-    position: relative;
-    overflow: hidden;
-    background-size: 190% 190%;
-    animation: bs-art-drift 10s ease-in-out infinite alternate;
-  }
-
-  .bs-style-art::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: linear-gradient(
-      120deg,
-      transparent 30%,
-      rgb(255 255 255 / 0.28) 50%,
-      transparent 70%
-    );
-    transform: translateX(-70%);
-    animation: bs-sheen-sweep 5.5s ease-in-out infinite;
-  }
-
-  .bs-style-art--romantic {
-    background-image: linear-gradient(140deg, #ff7ab0 0%, #c084fc 100%);
-  }
-
-  .bs-style-art--cute-colorful {
-    background-image: linear-gradient(140deg, #ff8fc0 0%, #7ce0b8 50%, #6ba3ff 100%);
-  }
-
-  .bs-style-art--elegant {
-    background-image: linear-gradient(140deg, #241b2e 0%, #8a6c3f 55%, #d9bb7d 100%);
-  }
-
-  .bs-style-art--fun-crazy {
-    background-image: linear-gradient(140deg, #ff4d97 0%, #a855f7 45%, #ffd23f 100%);
-  }
-
-  .bs-style-art--cinematic {
-    background-image: linear-gradient(140deg, #05060c 0%, #0d1220 55%, #3b5bbf 100%);
-  }
-
-  .bs-style-glyph {
-    animation: bs-glyph-float 4.5s ease-in-out infinite;
-  }
-
-  /* ---------- Cinematic poster picker (create flow Step 3) ---------- */
-
-  .bs-pick {
-    position: relative;
-    overflow: hidden;
-    background:
-      radial-gradient(
-        36rem 22rem at 82% -14%,
-        var(--p-glow, rgb(147 180 255 / 0.16)),
-        transparent 62%
-      ),
-      linear-gradient(155deg, var(--color-night-800), var(--color-night-950) 72%);
-  }
-
-  .bs-pick::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    opacity: 0.05;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  .bs-pick-stage {
-    position: relative;
-    overflow: hidden;
-  }
-
-  .bs-pick-stage > .bp-scene {
-    z-index: 1;
-  }
-
-  .bs-pick-stage::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    pointer-events: none;
-    background: linear-gradient(
-      180deg,
-      rgb(4 5 13 / 0.24) 0%,
-      transparent 38%,
-      rgb(4 5 13 / 0.72) 100%
-    );
-  }
-}
-
-@keyframes bs-art-drift {
-  from { background-position: 0% 50%; }
-  to { background-position: 100% 50%; }
-}
-
-@keyframes bs-sheen-sweep {
-  0% { transform: translateX(-70%); }
-  60%, 100% { transform: translateX(70%); }
-}
-
-@keyframes bs-glyph-float {
-  0%, 100% { transform: translateY(0) rotate(0deg); }
-  50% { transform: translateY(-5px) rotate(6deg); }
-}
-
 /* ==========================================================================
    Phase 5 — Generate, share and public pages
    --------------------------------------------------------------------------
@@ -1150,20 +931,6 @@
   .bp-generate {
     margin-top: 2.25rem;
   }
-}
-
-/* Cinematic page backdrop for the public birthday poster. Fills the dark page
-   around the card with a faint themed glow so the poster reads as art staged
-   on a screen rather than a card on a flat background. Decorative only; it
-   never intercepts pointer events. */
-.bs-guest-backdrop {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    radial-gradient(56rem 32rem at 50% -10%, rgb(147 180 255 / 0.08), transparent 62%),
-    radial-gradient(34rem 24rem at 10% 112%, rgb(255 77 151 / 0.06), transparent 60%),
-    radial-gradient(34rem 24rem at 90% 112%, rgb(168 85 247 / 0.06), transparent 60%);
 }
 
 /* Slightly taller than a nav button, and full-bleed on mobile so the primary
@@ -1346,4 +1113,560 @@
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
   }
+}
+
+/* ==========================================================================
+   Phase 3 — Choose a Style + hero stage (additive only)
+   --------------------------------------------------------------------------
+   Three additions, each scoped so nothing above changes:
+     1. `.bs-style-*` — the Step 3 "world" cards. Every card carries its own
+        `data-bstyle`, so each one shows its own colour story.
+     2. `.bs-shell[data-bstyle]` — restyles the create flow's surfaces and the
+        primary action with the SELECTED style's theme. Unlayered so it beats
+        the shared `@layer components` primitives when a style is chosen.
+     3. `.bp-stage-*` — the preview hero stage. This is the stage architecture,
+        not a 3D scene: per-style light, a drifting dust field and a character
+        mount placeholder. It never renders a canvas.
+   ========================================================================== */
+
+/* ---------- Step 3 style cards ---------- */
+
+.bs-style-card {
+  position: relative;
+}
+
+.bs-style-card[data-bstyle="romantic"] {
+  --sc-a: #ff7ab0;
+  --sc-c: #c084fc;
+  --sc-glow: rgb(255 77 151 / 0.45);
+  --sc-wash: rgb(255 77 151 / 0.18);
+  --sc-ring: rgb(255 163 201 / 0.42);
+}
+
+.bs-style-card[data-bstyle="cute-colorful"] {
+  --sc-a: #ffd27a;
+  --sc-c: #6ba3ff;
+  --sc-glow: rgb(255 179 71 / 0.42);
+  --sc-wash: rgb(255 210 122 / 0.16);
+  --sc-ring: rgb(255 220 150 / 0.4);
+}
+
+.bs-style-card[data-bstyle="elegant"] {
+  --sc-a: #e8cf9a;
+  --sc-c: #c9a96a;
+  --sc-glow: rgb(214 178 122 / 0.3);
+  --sc-wash: rgb(232 207 154 / 0.12);
+  --sc-ring: rgb(232 207 154 / 0.36);
+}
+
+.bs-style-card[data-bstyle="fun-crazy"] {
+  --sc-a: #ff2d95;
+  --sc-c: #22d3ee;
+  --sc-glow: rgb(255 45 149 / 0.42);
+  --sc-wash: rgb(255 45 149 / 0.18);
+  --sc-ring: rgb(255 122 176 / 0.42);
+}
+
+.bs-style-card[data-bstyle="cinematic"] {
+  --sc-a: #93b4ff;
+  --sc-c: #f59e0b;
+  --sc-glow: rgb(59 123 255 / 0.4);
+  --sc-wash: rgb(59 123 255 / 0.14);
+  --sc-ring: rgb(147 180 255 / 0.4);
+}
+
+.bs-style-surface {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 15.5rem;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 0.1);
+  border-radius: 1.5rem;
+  background-color: rgb(16 20 44 / 0.5);
+  padding: 2.375rem 1.5rem 1.75rem;
+  text-align: center;
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.06);
+  transition:
+    transform 200ms ease,
+    border-color 200ms ease,
+    box-shadow 200ms ease;
+}
+
+.bs-style-card:hover .bs-style-surface {
+  transform: translateY(-3px);
+  border-color: rgb(255 255 255 / 0.24);
+  box-shadow:
+    0 24px 50px -30px var(--sc-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.1);
+}
+
+.bs-style-card > .peer:checked ~ .bs-style-surface {
+  border-color: var(--sc-ring);
+  box-shadow:
+    inset 0 0 0 1px var(--sc-ring),
+    0 30px 70px -36px var(--sc-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.12);
+}
+
+.bs-style-card > .peer:focus-visible ~ .bs-style-surface {
+  outline: 2px solid var(--sc-ring);
+  outline-offset: 2px;
+}
+
+.bs-style-aura {
+  position: absolute;
+  left: 50%;
+  top: -4.5rem;
+  width: 18rem;
+  height: 11rem;
+  transform: translateX(-50%);
+  border-radius: 9999px;
+  background-image: radial-gradient(
+    closest-side,
+    var(--sc-wash) 0%,
+    transparent 72%
+  );
+  opacity: 0.7;
+  pointer-events: none;
+  transition: opacity 200ms ease;
+}
+
+.bs-style-card:hover .bs-style-aura {
+  opacity: 1;
+}
+
+.bs-style-icon {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 4.5rem;
+  height: 4.5rem;
+  border: 1px solid rgb(255 255 255 / 0.18);
+  border-radius: 9999px;
+  background-color: var(--sc-wash);
+  background-image: linear-gradient(
+    160deg,
+    rgb(255 255 255 / 0.16) 0%,
+    rgb(255 255 255 / 0.02) 100%
+  );
+  box-shadow:
+    0 18px 36px -18px var(--sc-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.24);
+  backdrop-filter: blur(8px);
+}
+
+.bs-style-card > .peer:checked ~ .bs-style-surface .bs-style-icon {
+  box-shadow:
+    0 0 0 1px var(--sc-ring) inset,
+    0 18px 44px -16px var(--sc-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.28);
+}
+
+.bs-style-emoji {
+  font-size: 1.875rem;
+  line-height: 1;
+  filter: drop-shadow(0 6px 14px rgb(0 0 0 / 0.45));
+}
+
+.bs-style-title {
+  position: relative;
+  font-size: 1.0625rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: #ffffff;
+}
+
+.bs-style-desc {
+  position: relative;
+  max-width: 20rem;
+  font-size: 0.8125rem;
+  line-height: 1.4rem;
+  color: rgb(255 255 255 / 0.58);
+}
+
+.bs-style-check {
+  position: absolute;
+  right: 1.25rem;
+  top: 1.25rem;
+  z-index: 2;
+  display: none;
+  place-items: center;
+  width: 1.625rem;
+  height: 1.625rem;
+  border-radius: 9999px;
+  color: #ffffff;
+  background-image: linear-gradient(140deg, var(--sc-a) 0%, var(--sc-c) 100%);
+  box-shadow:
+    0 10px 24px -10px var(--sc-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.35);
+}
+
+.bs-style-card > .peer:checked ~ .bs-style-check {
+  display: grid;
+}
+
+.bs-style-chip {
+  position: absolute;
+  left: 1.25rem;
+  top: 1.25rem;
+  z-index: 2;
+  border: 1px solid var(--sc-ring);
+  border-radius: 9999px;
+  background-color: var(--sc-wash);
+  padding: 0.25rem 0.625rem;
+  font-size: 0.625rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #ffffff;
+}
+
+/* ---------- Create-flow theme (selected style) ---------- */
+
+.bs-shell[data-bstyle="romantic"] {
+  --t-a: #ff4d97;
+  --t-b: #c084fc;
+  --t-c: #8b5cf6;
+  --t-glow: rgb(168 85 247 / 0.45);
+  --t-edge: rgb(255 163 201 / 0.24);
+  --t-ink: #ff9cc4;
+  --t-soft: rgb(255 77 151 / 0.08);
+}
+
+.bs-shell[data-bstyle="cute-colorful"] {
+  --t-a: #ffb347;
+  --t-b: #ff4d97;
+  --t-c: #6ba3ff;
+  --t-glow: rgb(255 77 151 / 0.4);
+  --t-edge: rgb(255 210 122 / 0.28);
+  --t-ink: #ffd27a;
+  --t-soft: rgb(255 179 71 / 0.1);
+}
+
+.bs-shell[data-bstyle="elegant"] {
+  --t-a: #e8cf9a;
+  --t-b: #d6b07a;
+  --t-c: #c9a96a;
+  --t-glow: rgb(214 178 122 / 0.3);
+  --t-edge: rgb(232 207 154 / 0.24);
+  --t-ink: #efdbb0;
+  --t-soft: rgb(232 207 154 / 0.08);
+}
+
+.bs-shell[data-bstyle="fun-crazy"] {
+  --t-a: #ff2d95;
+  --t-b: #ffd23f;
+  --t-c: #22d3ee;
+  --t-glow: rgb(255 45 149 / 0.42);
+  --t-edge: rgb(255 210 63 / 0.26);
+  --t-ink: #ff9cc4;
+  --t-soft: rgb(255 45 149 / 0.1);
+}
+
+.bs-shell[data-bstyle="cinematic"] {
+  --t-a: #3b7bff;
+  --t-b: #8b5cf6;
+  --t-c: #f59e0b;
+  --t-glow: rgb(59 123 255 / 0.4);
+  --t-edge: rgb(93 116 255 / 0.26);
+  --t-ink: #93b4ff;
+  --t-soft: rgb(59 123 255 / 0.09);
+}
+
+.bs-shell[data-bstyle] .bs-btn-primary {
+  background-image: linear-gradient(
+    120deg,
+    var(--t-a) 0%,
+    var(--t-b) 52%,
+    var(--t-c) 100%
+  );
+  box-shadow:
+    0 16px 38px -14px var(--t-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.28);
+}
+
+.bs-shell[data-bstyle] .bs-card {
+  border-color: var(--t-edge);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.06),
+    0 34px 80px -52px var(--t-glow);
+}
+
+.bs-shell[data-bstyle] .bs-hairline-top::before {
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--t-ink),
+    transparent
+  );
+}
+
+.bs-shell[data-bstyle] .bs-step-number {
+  color: var(--t-ink);
+  border-color: var(--t-edge);
+  background-color: var(--t-soft);
+}
+
+.bs-shell[data-bstyle] .bs-eyebrow {
+  color: var(--t-ink);
+  border-color: var(--t-edge);
+  background-color: var(--t-soft);
+}
+
+.bs-shell[data-bstyle] .step-current {
+  background-image: linear-gradient(
+    140deg,
+    var(--t-a) 0%,
+    var(--t-b) 52%,
+    var(--t-c) 100%
+  );
+  box-shadow: 0 10px 30px -8px var(--t-glow);
+}
+
+.bs-shell[data-bstyle] .bp-frame {
+  box-shadow: 0 44px 90px -54px var(--t-glow);
+}
+
+/* ---------- Preview hero stage ---------- */
+
+.bp-stage {
+  --bp-dust: rgb(255 154 190 / 0.9);
+  --bp-orb-a: rgb(255 77 151 / 0.5);
+  --bp-orb-b: rgb(168 85 247 / 0.5);
+  --bp-floor-pool: rgb(255 122 176 / 0.5);
+  --bp-floor-line: rgb(255 163 201 / 0.55);
+
+  position: relative;
+  z-index: 0;
+  isolation: isolate;
+  min-height: 23rem;
+  overflow: hidden;
+  background-image:
+    radial-gradient(64% 60% at 50% 0%, var(--bp-orb-a) 0%, transparent 64%),
+    radial-gradient(60% 58% at 10% 88%, var(--bp-orb-b) 0%, transparent 62%),
+    linear-gradient(180deg, rgb(255 255 255 / 0.05) 0%, transparent 40%);
+  border-bottom: 1px solid var(--b-card-border);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.08);
+}
+
+@media (min-width: 40rem) {
+  .bp-stage {
+    min-height: 24rem;
+  }
+}
+
+@media (min-width: 64rem) {
+  .bp-stage {
+    min-height: 25rem;
+  }
+}
+
+.bp-stage[data-bstyle="cute-colorful"] {
+  --bp-dust: rgb(255 210 122 / 0.95);
+  --bp-orb-a: rgb(255 179 71 / 0.55);
+  --bp-orb-b: rgb(107 163 255 / 0.55);
+  --bp-floor-pool: rgb(255 122 176 / 0.55);
+  --bp-floor-line: rgb(255 220 150 / 0.6);
+}
+
+.bp-stage[data-bstyle="elegant"] {
+  --bp-dust: rgb(232 207 154 / 0.8);
+  --bp-orb-a: rgb(214 178 122 / 0.4);
+  --bp-orb-b: rgb(154 154 190 / 0.35);
+  --bp-floor-pool: rgb(214 178 122 / 0.4);
+  --bp-floor-line: rgb(232 207 154 / 0.5);
+}
+
+.bp-stage[data-bstyle="fun-crazy"] {
+  --bp-dust: rgb(255 45 149 / 0.9);
+  --bp-orb-a: rgb(255 45 149 / 0.55);
+  --bp-orb-b: rgb(34 211 238 / 0.55);
+  --bp-floor-pool: rgb(255 210 63 / 0.5);
+  --bp-floor-line: rgb(255 122 176 / 0.6);
+}
+
+.bp-stage[data-bstyle="cinematic"] {
+  --bp-dust: rgb(147 180 255 / 0.85);
+  --bp-orb-a: rgb(59 123 255 / 0.42);
+  --bp-orb-b: rgb(139 92 246 / 0.45);
+  --bp-floor-pool: rgb(59 123 255 / 0.42);
+  --bp-floor-line: rgb(147 180 255 / 0.5);
+}
+
+.bp-stage-light {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(52px);
+  pointer-events: none;
+}
+
+.bp-stage-light-a {
+  top: -5rem;
+  left: 8%;
+  width: 17rem;
+  height: 17rem;
+  background-color: var(--bp-orb-a);
+  animation: bp-stage-throb 9s ease-in-out infinite;
+}
+
+.bp-stage-light-b {
+  right: 6%;
+  bottom: -6rem;
+  width: 19rem;
+  height: 19rem;
+  background-color: var(--bp-orb-b);
+}
+
+.bp-stage-wash {
+  position: absolute;
+  inset: 0;
+  background-image: linear-gradient(
+    180deg,
+    transparent 55%,
+    rgb(0 0 0 / 0.3) 100%
+  );
+  pointer-events: none;
+}
+
+.bp-stage-particles {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.bp-stage-particles > span {
+  position: absolute;
+  border-radius: 9999px;
+  background-color: var(--bp-dust);
+  filter: blur(0.6px);
+  animation: bp-stage-float 10s ease-in-out infinite;
+}
+
+.bp-stage-mount {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+
+.bp-stage-halo {
+  position: absolute;
+  width: 17rem;
+  height: 17rem;
+  border-radius: 9999px;
+  background-image: radial-gradient(
+    closest-side,
+    var(--bp-orb-a) 0%,
+    transparent 72%
+  );
+  filter: blur(14px);
+  animation: bp-stage-throb 6s ease-in-out infinite;
+}
+
+.bp-stage-core {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 7.5rem;
+  height: 7.5rem;
+  border: 1px solid rgb(255 255 255 / 0.22);
+  border-radius: 9999px;
+  background-image: linear-gradient(
+    160deg,
+    rgb(255 255 255 / 0.12) 0%,
+    rgb(255 255 255 / 0.02) 100%
+  );
+  box-shadow:
+    0 28px 64px -24px var(--b-glow),
+    inset 0 1px 0 rgb(255 255 255 / 0.25);
+  backdrop-filter: blur(10px);
+}
+
+.bp-stage-emoji {
+  font-size: 2.375rem;
+  line-height: 1;
+  filter: drop-shadow(0 8px 18px rgb(0 0 0 / 0.55));
+}
+
+.bp-stage-floor {
+  position: absolute;
+  inset-inline: -25%;
+  bottom: -3rem;
+  height: 7rem;
+  border-radius: 9999px;
+  background-image: radial-gradient(
+    closest-side,
+    var(--bp-floor-pool) 0%,
+    transparent 70%
+  );
+  filter: blur(6px);
+  pointer-events: none;
+  animation: bp-stage-throb 7s ease-in-out infinite;
+}
+
+.bp-stage-floor::before {
+  content: "";
+  position: absolute;
+  bottom: 3.5rem;
+  left: 50%;
+  width: 70%;
+  height: 1px;
+  transform: translateX(-50%);
+  background-image: linear-gradient(
+    90deg,
+    transparent,
+    var(--bp-floor-line),
+    transparent
+  );
+}
+
+@keyframes bp-stage-float {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(0, -20px, 0);
+  }
+}
+
+@keyframes bp-stage-throb {
+  0%,
+  100% {
+    opacity: 0.55;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.85;
+    transform: scale(1.06);
+  }
+}
+
+/* ---------- Phase 4A — real 3D canvas inside the stage ---------- */
+
+.bp-stage-3d {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.bp-stage-3d canvas {
+  display: block;
+}
+
+/* When the real 3D world is mounted, the CSS atmosphere stays in the DOM
+   (so the fallback markup contract holds) but is visually retired. */
+.bp-stage--3d .bp-stage-light,
+.bp-stage--3d .bp-stage-wash,
+.bp-stage--3d .bp-stage-particles,
+.bp-stage--3d .bp-stage-mount,
+.bp-stage--3d .bp-stage-floor {
+  opacity: 0;
+  pointer-events: none;
 }

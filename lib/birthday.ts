@@ -72,7 +72,7 @@ export type BirthdayStyle = {
   id: BirthdayStyleId;
   name: string;
   emoji: string;
-  tagline: string;
+  description: string;
   gradient: string;
 };
 
@@ -81,15 +81,15 @@ export const BIRTHDAY_STYLES: readonly BirthdayStyle[] = [
     id: "romantic",
     name: "Romantic",
     emoji: "❤️",
-    tagline: "Soft pinks, petals and candlelight",
+    description: "Soft pinks, petals and candlelight",
     gradient:
       "linear-gradient(140deg, var(--color-blush-500) 0%, var(--color-grape-500) 100%)",
   },
   {
     id: "cute-colorful",
     name: "Cute & Colorful",
-    emoji: "🎀",
-    tagline: "Playful pastels and cheerful pops",
+    emoji: "🎨",
+    description: "Playful colors and cheerful pops",
     gradient:
       "linear-gradient(140deg, var(--color-blush-400) 0%, var(--color-azure-400) 100%)",
   },
@@ -97,7 +97,7 @@ export const BIRTHDAY_STYLES: readonly BirthdayStyle[] = [
     id: "elegant",
     name: "Elegant",
     emoji: "✨",
-    tagline: "Deep violets and quiet light",
+    description: "Deep tones and sophisticated light",
     gradient:
       "linear-gradient(140deg, var(--color-grape-400) 0%, var(--color-azure-500) 100%)",
   },
@@ -105,7 +105,7 @@ export const BIRTHDAY_STYLES: readonly BirthdayStyle[] = [
     id: "fun-crazy",
     name: "Fun & Crazy",
     emoji: "🎉",
-    tagline: "Confetti, colour and motion",
+    description: "Confetti, color and nonstop motion",
     gradient:
       "linear-gradient(140deg, var(--color-blush-500) 0%, var(--color-azure-500) 100%)",
   },
@@ -113,7 +113,7 @@ export const BIRTHDAY_STYLES: readonly BirthdayStyle[] = [
     id: "cinematic",
     name: "Cinematic",
     emoji: "🎬",
-    tagline: "Moody frames and dramatic light",
+    description: "Epic visuals and dramatic light",
     gradient:
       "linear-gradient(140deg, var(--color-night-600) 0%, var(--color-azure-400) 100%)",
   },
@@ -231,9 +231,9 @@ export const CREATE_STEPS = [
   {
     id: 1,
     name: "Details",
-    title: "Birthday Person Details",
+    title: "Tell us about the birthday",
     description:
-      "Only you know these details. Nothing is uploaded or shared yet.",
+      "Start with a few simple details. We'll turn them into a personalized birthday experience.",
   },
   {
     id: 2,

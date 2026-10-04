@@ -1,11 +1,8 @@
 import Link from "next/link";
-import ActionLink from "./action-link";
 import BrandLink from "./brand-link";
+import CreateCta from "./create-cta";
 import MobileNav from "./mobile-nav";
 import { NAV_ITEMS } from "@/lib/site-content";
-
-const CTA_LABEL = "Create Birthday";
-const CTA_LABEL_SHORT = "Create";
 
 export default function SiteHeader() {
   return (
@@ -26,17 +23,11 @@ export default function SiteHeader() {
         </nav>
 
         <div className="hidden md:block">
-          <ActionLink href="/create" className="px-5 py-2.5 text-sm">
-            {CTA_LABEL}
-          </ActionLink>
+          <CreateCta className="px-5 py-2.5 text-sm" />
         </div>
 
         <div className="md:hidden">
-          <MobileNav
-            items={NAV_ITEMS}
-            ctaLabel={CTA_LABEL}
-            ctaLabelShort={CTA_LABEL_SHORT}
-          />
+          <MobileNav items={NAV_ITEMS} />
         </div>
       </div>
     </header>
